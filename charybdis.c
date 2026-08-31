@@ -1,22 +1,7 @@
-/*
- * Copyright 2020 Christopher Courtney <drashna@live.com> (@drashna)
- * Copyright 2021 Quentin LEBASTARD <qlebastard@gmail.com>
- * Copyright 2021 Charly Delay <charly@codesink.dev> (@0xcharly)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Publicw License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+// Copyright 2020 Christopher Courtney <drashna@live.com> (@drashna)
+// Copyright 2021 Quentin LEBASTARD <qlebastard@gmail.com>
+// Copyright 2021 Charly Delay <charly@codesink.dev> (@0xcharly)
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include "charybdis.h"
 #include "transactions.h"
 #include <string.h>
@@ -27,25 +12,25 @@
 
 #ifdef POINTING_DEVICE_ENABLE
 #    ifndef CHARYBDIS_MINIMUM_DEFAULT_DPI
-#        define CHARYBDIS_MINIMUM_DEFAULT_DPI 800 // default 400
-#    endif                                        // CHARYBDIS_MINIMUM_DEFAULT_DPI
+#        define CHARYBDIS_MINIMUM_DEFAULT_DPI 400
+#    endif // CHARYBDIS_MINIMUM_DEFAULT_DPI
 
 #    ifndef CHARYBDIS_DEFAULT_DPI_CONFIG_STEP
-#        define CHARYBDIS_DEFAULT_DPI_CONFIG_STEP 400 // default 200
-#    endif                                            // CHARYBDIS_DEFAULT_DPI_CONFIG_STEP
+#        define CHARYBDIS_DEFAULT_DPI_CONFIG_STEP 200
+#    endif // CHARYBDIS_DEFAULT_DPI_CONFIG_STEP
 
 #    ifndef CHARYBDIS_MINIMUM_SNIPING_DPI
-#        define CHARYBDIS_MINIMUM_SNIPING_DPI 400 // default 200
-#    endif                                        // CHARYBDIS_MINIMUM_SNIPER_MODE_DPI
+#        define CHARYBDIS_MINIMUM_SNIPING_DPI 200
+#    endif // CHARYBDIS_MINIMUM_SNIPER_MODE_DPI
 
 #    ifndef CHARYBDIS_SNIPING_DPI_CONFIG_STEP
-#        define CHARYBDIS_SNIPING_DPI_CONFIG_STEP 200 // default 100
-#    endif                                            // CHARYBDIS_SNIPING_DPI_CONFIG_STEP
+#        define CHARYBDIS_SNIPING_DPI_CONFIG_STEP 100
+#    endif // CHARYBDIS_SNIPING_DPI_CONFIG_STEP
 
 // Fixed DPI for drag-scroll.
 #    ifndef CHARYBDIS_DRAGSCROLL_DPI
-#        define CHARYBDIS_DRAGSCROLL_DPI 100 // default 100
-#    endif                                   // CHARYBDIS_DRAGSCROLL_DPI
+#        define CHARYBDIS_DRAGSCROLL_DPI 100
+#    endif // CHARYBDIS_DRAGSCROLL_DPI
 
 #    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
 #        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE 6
@@ -54,8 +39,8 @@
 typedef union {
     uint8_t raw;
     struct {
-        uint8_t pointer_default_dpi : 2; // 16 steps available.
-        uint8_t pointer_sniping_dpi : 1; // 4 steps available.
+        uint8_t pointer_default_dpi : 4; // 16 steps available.
+        uint8_t pointer_sniping_dpi : 2; // 4 steps available.
         bool    is_dragscroll_enabled : 1;
         bool    is_sniping_enabled : 1;
     } __attribute__((packed));
