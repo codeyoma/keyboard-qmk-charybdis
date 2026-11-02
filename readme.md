@@ -2,5 +2,5 @@
 
 ![My Layout](./charybdis_keymap.ortho.svg)
 
-
-- qmk flash -kb bastardkb/charybdis/3x5 -km default
+- `yoma.sh`
+- `qmk flash -kb bastardkb/charybdis/3x5 -km default`
