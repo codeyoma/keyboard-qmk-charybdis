@@ -22,7 +22,6 @@ import yaml
 REPO = Path(__file__).resolve().parent  # keyboards/bastardkb/charybdis inside qmk_firmware
 QMK_HOME = REPO.parents[2]
 KEYMAP_C = REPO / "3x5/keymaps/default/keymap.c"
-KEYBOARD_JSON = REPO / "3x5/keyboard.json"  # physical layout, so drawing works offline
 CONFIG = REPO / "keymap_drawer.config.yaml"
 OUT_YAML = REPO / "charybdis_keymap.yaml"
 OUT_SVG = REPO / "charybdis_keymap.ortho.svg"
@@ -112,7 +111,7 @@ def placement(positions, placed):
         placed.append((row, center, offset))
         return {"a": "bottom", "o": offset} if offset else {"a": "bottom"}
     if min(rows) == 1:  # home row over bottom row: a flatter box, moved down off the home row mod legend
-        return {"s": 0.2, "h": 20}
+        return {"s": 0.28, "h": 20}
     return {}
 
 
@@ -142,7 +141,12 @@ def main():
                         for (positions, _), legend in zip(combos, legends)]
 
     OUT_YAML.write_text(yaml.safe_dump(parsed, sort_keys=False, allow_unicode=True, default_flow_style=None, width=120))
-    run(["keymap", "-c", CONFIG, "draw", "-j", KEYBOARD_JSON, "-l", "LAYOUT", OUT_YAML, "-o", OUT_SVG])
+    # The physical layout comes from the qmk_keyboard name in the YAML: keymap-drawer has its own
+    # bastardkb/charybdis/3x5 layout with the column stagger and the angled thumb keys.
+    run(["keymap", "-c", CONFIG, "draw", OUT_YAML, "-o", OUT_SVG])
+    # Write non-ASCII legends (the ▽ on transparent keys) as character references: the SVG has no
+    # encoding declaration, and viewers that guess Latin-1 would show them as "â–½".
+    OUT_SVG.write_text(OUT_SVG.read_text(encoding="utf-8").encode("ascii", "xmlcharrefreplace").decode("ascii"))
     print(f"{len(LAYER_NAMES)} layers, {len(combos)} combos: {OUT_SVG.name}")
 
 
