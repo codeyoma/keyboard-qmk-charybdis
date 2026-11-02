@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
           KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         MOUSE,   KC_LSFT,   LOWER,      RAISE,  KC_SPC 
+                         MOUSE,   KC_LSFT,   LOWER,      RAISE,  KC_SPC
   //                   ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
         KC_SPC, XXXXXXX, KC_LPRN, KC_RPRN, XXXXXXX,    XXXXXXX,    KC_1,    KC_2,    KC_3, KC_BSLS,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         _______, _______, _______,  _______,    KC_0 
+                         _______, _______, _______,  _______,    KC_0
   //                   ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -112,11 +112,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG(ARST),   KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG(LAYER_ARST),   KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, XXXXXXX,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_MPLY, KC_MUTE, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         _______, _______, _______,    _______, TEST 
+                         _______, _______, _______,    _______, TEST
   //                   ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -137,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
        SNIPING, XXXXXXX, DRG_TOG, DRGSCRL, S_D_MOD,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         _______, XXXXXXX, _______,      RAISE, XXXXXXX 
+                         _______, XXXXXXX, _______,      RAISE, XXXXXXX
   //                   ╰───────────────────────────╯ ╰──────────────────╯
   ),
 

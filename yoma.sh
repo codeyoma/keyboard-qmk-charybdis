@@ -1,9 +1,11 @@
 #!/bin/bash
-qmk c2json keyboards/bastardkb/charybdis/3x5/keymaps/default/keymap.c | keymap parse --layer-names Base Colemak Lower Raise Adjust Mouse Test -c 10 -q -> charybdis_keymap.yaml
-keymap draw charybdis_keymap.yaml charybdis_combo.yaml > charybdis_keymap.ortho.svg 
+# Redraw the keymap image, then commit and push this repository.
+# The repository lives in qmk_firmware/keyboards/bastardkb/charybdis, so no copying is needed.
+set -euo pipefail
+cd "$(dirname "$0")"
 
-rsync -a --delete --exclude=.git ~/projects/keyboard/bastardkb-qmk/keyboards/bastardkb/charybdis/ ~/projects/keyboard/keyboard-qmk-charybdis/
-cd ~/projects/keyboard/keyboard-qmk-charybdis
+uv run draw_keymap.py
+
 git add .
-git commit -m "Sync charybdis updates"
+git diff --cached --quiet || git commit -m "Sync charybdis updates"
 git push origin main

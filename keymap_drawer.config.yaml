@@ -1,0 +1,22 @@
+# keymap-drawer settings used by draw_keymap.py.
+# Only the entries below differ from keymap-drawer's defaults.
+parse_config:
+  # Legends for keycodes keymap-drawer does not know, matched on the raw QMK keycode.
+  raw_binding_map:
+    LCTL(LSFT(KC_TAB)): Prev tab
+    LCTL(KC_TAB): Next tab
+    LSFT(KC_MINS): _
+    LSFT(KC_EQL): +
+    LSFT(KC_BSLS): '|'
+    KC_GLB: Globe
+    TD(TD_QUOTE): {t: "'", s: '"'}
+    DPI_MOD: DPI+
+    S_D_MOD: Snipe DPI+
+    SNIPING: Sniping
+    DRG_TOG: Drag lock
+    DRGSCRL: Drag scroll
+    MS_BTN1: Left click
+    MS_BTN2: Right click
+    MS_BTN3: Middle click
+    MS_BTN4: Back
+    MS_BTN5: Forward
