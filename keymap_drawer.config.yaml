@@ -3,6 +3,8 @@
 parse_config:
   # Legends for keycodes keymap-drawer does not know, matched on the raw QMK keycode.
   raw_binding_map:
+    # The KeyLay key: opens or closes the KeyLay cheat sheet
+    KL_OPEN: KeyLay
     LCTL(LSFT(KC_TAB)): Prev tab
     LCTL(KC_TAB): Next tab
     LSFT(KC_MINS): _

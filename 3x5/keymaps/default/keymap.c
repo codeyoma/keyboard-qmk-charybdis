@@ -27,6 +27,11 @@ enum charybdis_keymap_layers {
     LAYER_TEST,
 };
 
+enum custom_keycodes {
+    // Opens or closes the KeyLay cheat sheet (see the KeyLay block at the end)
+    KL_OPEN = SAFE_RANGE,
+};
+
 // #define LOWER MO(LAYER_LOWER)
 // #define RAISE MO(LAYER_RAISE))
 #define LOWER TL_LOWR
@@ -118,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG(LAYER_ARST),   KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, XXXXXXX,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_MPLY, KC_MUTE, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_MPLY, KC_MUTE, XXXXXXX, XXXXXXX, KL_OPEN,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
                          _______, _______, _______,    _______, TEST
   //                   ╰───────────────────────────╯ ╰──────────────────╯
@@ -349,6 +354,8 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 #    define KEYLAY_VERSION 0x01
 #    define KEYLAY_MSG_STATE 0x01
 #    define KEYLAY_MSG_GET_STATE 0x02
+#    define KEYLAY_MSG_COMMAND 0x03
+#    define KEYLAY_CMD_TOGGLE_POPOVER 0x01
 #    define KEYLAY_REPORT_LEN 32 // RAW_EPSIZE
 
 static void keylay_send_state(layer_state_t state) {
@@ -363,6 +370,16 @@ static void keylay_send_state(layer_state_t state) {
     report[6]                   = (mask >> 16) & 0xFF;
     report[7]                   = (mask >> 24) & 0xFF;
     report[8]                   = 0; // no batteries on a wired keyboard
+    raw_hid_send(report, sizeof(report));
+}
+
+// KL_OPEN: tells the app to open or close its cheat sheet.
+static void keylay_send_command(uint8_t command) {
+    uint8_t report[KEYLAY_REPORT_LEN] = {0};
+    report[0]                         = KEYLAY_MAGIC;
+    report[1]                         = KEYLAY_VERSION;
+    report[2]                         = KEYLAY_MSG_COMMAND;
+    report[3]                         = command;
     raw_hid_send(report, sizeof(report));
 }
 
@@ -388,3 +405,15 @@ void housekeeping_task_user(void) {
     }
 }
 #endif
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == KL_OPEN) {
+#ifdef RAW_ENABLE
+        if (record->event.pressed) {
+            keylay_send_command(KEYLAY_CMD_TOGGLE_POPOVER);
+        }
+#endif
+        return false;
+    }
+    return true;
+}

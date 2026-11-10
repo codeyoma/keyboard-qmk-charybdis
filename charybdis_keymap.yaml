@@ -67,7 +67,7 @@ layers:
     - VOLU
     - MNXT
     - ''
-  - ['', '', '', '', '', MPLY, MUTE, '', '', '']
+  - ['', '', '', '', '', MPLY, MUTE, '', '', KeyLay]
   - - {t: ▽, type: trans}
     - {t: ▽, type: trans}
     - {t: ▽, type: trans}
