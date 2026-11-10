@@ -340,23 +340,23 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// KeyTray (the menu bar app in Projects/keyboard/keytray): reports the active layer to it
-// over raw HID, see keytray/firmware/PROTOCOL.md. RAW_ENABLE is set in rules.mk.
+// KeyLay (the menu bar app in Projects/keyboard/keylay): reports the active layer to it
+// over raw HID, see keylay/firmware/PROTOCOL.md. RAW_ENABLE is set in rules.mk.
 #ifdef RAW_ENABLE
 #    include "raw_hid.h"
 
-#    define KEYTRAY_MAGIC 0x4B
-#    define KEYTRAY_VERSION 0x01
-#    define KEYTRAY_MSG_STATE 0x01
-#    define KEYTRAY_MSG_GET_STATE 0x02
-#    define KEYTRAY_REPORT_LEN 32 // RAW_EPSIZE
+#    define KEYLAY_MAGIC 0x4B
+#    define KEYLAY_VERSION 0x01
+#    define KEYLAY_MSG_STATE 0x01
+#    define KEYLAY_MSG_GET_STATE 0x02
+#    define KEYLAY_REPORT_LEN 32 // RAW_EPSIZE
 
-static void keytray_send_state(layer_state_t state) {
-    uint8_t  report[KEYTRAY_REPORT_LEN] = {0};
+static void keylay_send_state(layer_state_t state) {
+    uint8_t  report[KEYLAY_REPORT_LEN] = {0};
     uint32_t mask               = (uint32_t)state;
-    report[0]                   = KEYTRAY_MAGIC;
-    report[1]                   = KEYTRAY_VERSION;
-    report[2]                   = KEYTRAY_MSG_STATE;
+    report[0]                   = KEYLAY_MAGIC;
+    report[1]                   = KEYLAY_VERSION;
+    report[2]                   = KEYLAY_MSG_STATE;
     report[3]                   = get_highest_layer(state);
     report[4]                   = mask & 0xFF;
     report[5]                   = (mask >> 8) & 0xFF;
@@ -368,8 +368,8 @@ static void keytray_send_state(layer_state_t state) {
 
 // The app asks for the state when it connects.
 void raw_hid_receive(uint8_t *data, uint8_t length) {
-    if (length >= 3 && data[0] == KEYTRAY_MAGIC && data[2] == KEYTRAY_MSG_GET_STATE) {
-        keytray_send_state(layer_state | default_layer_state);
+    if (length >= 3 && data[0] == KEYLAY_MAGIC && data[2] == KEYLAY_MSG_GET_STATE) {
+        keylay_send_state(layer_state | default_layer_state);
     }
 }
 
@@ -384,7 +384,7 @@ void housekeeping_task_user(void) {
     if (!sent || state != last_state) {
         last_state = state;
         sent       = true;
-        keytray_send_state(state);
+        keylay_send_state(state);
     }
 }
 #endif
