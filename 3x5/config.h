@@ -66,3 +66,5 @@
 #define COMBO_SHOULD_TRIGGER
 
 #define NKRO_DEFAULT_ON true
+
+#define PERMISSIVE_HOLD_PER_KEY

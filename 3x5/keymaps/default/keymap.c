@@ -42,6 +42,10 @@ enum charybdis_keymap_layers {
 #define HM(X) LALT_T(X)
 #define HI(X) LSFT_T(X)
 
+// Right-hand home row mods
+#define RM(X) RALT_T(X)
+#define RI(X) RSFT_T(X)
+
 #define SFT_TAB LSFT_T(KC_TAB)
 #define FOCUS LCTL(KC_F4)
 #define MV_LEFT LGUI(KC_LBRC)
@@ -63,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
           KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-      HP(KC_A),HR(KC_S),HM(KC_D),HI(KC_F),    KC_G,       KC_H,HI(KC_J),HM(KC_K),HR(KC_L),HP(KC_SCLN),
+      HP(KC_A),HR(KC_S),HM(KC_D),HI(KC_F),    KC_G,       KC_H,RI(KC_J),RM(KC_K),HR(KC_L),HP(KC_SCLN),
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
           KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
@@ -75,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
           KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,       KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-      HP(KC_A),HR(KC_R),HM(KC_S),HI(KC_T),    KC_D,       KC_H,HI(KC_N),HM(KC_E),HR(KC_I),HP(KC_O),
+      HP(KC_A),HR(KC_R),HM(KC_S),HI(KC_T),    KC_D,       KC_H,RI(KC_N),RM(KC_E),HR(KC_I),HP(KC_O),
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
           KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_K,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
@@ -207,8 +211,8 @@ const uint16_t PROGMEM under_combo[]       = {KC_H, KC_N, COMBO_END};
 // const uint16_t PROGMEM plus_combo[]        = {KC_K, KC_COMM, COMBO_END};
 // const uint16_t PROGMEM equal_combo[]       = {KC_L, KC_DOT, COMBO_END};
 // const uint16_t PROGMEM pipe_combo[]        = {KC_SCLN, KC_SLSH, COMBO_END};
-const uint16_t PROGMEM minus_combo[] = {HI(KC_J), KC_M, COMBO_END};
-const uint16_t PROGMEM plus_combo[]  = {HM(KC_K), KC_COMM, COMBO_END};
+const uint16_t PROGMEM minus_combo[] = {RI(KC_J), KC_M, COMBO_END};
+const uint16_t PROGMEM plus_combo[]  = {RM(KC_K), KC_COMM, COMBO_END};
 const uint16_t PROGMEM equal_combo[] = {HR(KC_L), KC_DOT, COMBO_END};
 const uint16_t PROGMEM pipe_combo[]  = {HP(KC_SCLN), KC_SLSH, COMBO_END};
 
@@ -231,8 +235,8 @@ const uint16_t PROGMEM caret_combo[]   = {KC_Y, KC_H, COMBO_END};
 // const uint16_t PROGMEM asterisk_combo[]    = {KC_I, KC_K, COMBO_END};
 // const uint16_t PROGMEM tilde_combo[]       = {KC_O, KC_L, COMBO_END};
 // const uint16_t PROGMEM grave_combo[]       = {KC_P, KC_SCLN, COMBO_END};
-const uint16_t PROGMEM ampersand_combo[] = {KC_U, HI(KC_J), COMBO_END};
-const uint16_t PROGMEM asterisk_combo[]  = {KC_I, HM(KC_K), COMBO_END};
+const uint16_t PROGMEM ampersand_combo[] = {KC_U, RI(KC_J), COMBO_END};
+const uint16_t PROGMEM asterisk_combo[]  = {KC_I, RM(KC_K), COMBO_END};
 const uint16_t PROGMEM tilde_combo[]     = {KC_O, HR(KC_L), COMBO_END};
 const uint16_t PROGMEM grave_combo[]     = {KC_P, HP(KC_SCLN), COMBO_END};
 
@@ -326,3 +330,12 @@ uint16_t get_combo_term(uint16_t combo_index, combo_t *combo) {
     return COMBO_TERM;
 }
 #endif
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    // Option + letter types special characters on macOS, so Alt needs a full hold.
+    // & 0x0F drops the right-hand flag, so LALT_T (0x04) and RALT_T (0x14) both match.
+    if (IS_QK_MOD_TAP(keycode) && (QK_MOD_TAP_GET_MODS(keycode) & 0x0F) == MOD_LALT) {
+        return false;
+    }
+    return true;
+}

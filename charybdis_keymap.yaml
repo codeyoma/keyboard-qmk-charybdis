@@ -8,8 +8,8 @@ layers:
     - {t: F, h: LSFT}
     - G
     - H
-    - {t: J, h: LSFT}
-    - {t: K, h: LALT}
+    - {t: J, h: RSFT}
+    - {t: K, h: RALT}
     - {t: L, h: LGUI}
     - {t: ;, h: LCTL}
   - [Z, X, C, V, B, N, M, ',', ., /]
@@ -22,8 +22,8 @@ layers:
     - {t: T, h: LSFT}
     - D
     - H
-    - {t: N, h: LSFT}
-    - {t: E, h: LALT}
+    - {t: N, h: RSFT}
+    - {t: E, h: RALT}
     - {t: I, h: LGUI}
     - {t: O, h: LCTL}
   - [Z, X, C, V, B, K, M, ',', ., /]
