@@ -339,3 +339,52 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+// KeyTray (the menu bar app in Projects/keyboard/keytray): reports the active layer to it
+// over raw HID, see keytray/firmware/PROTOCOL.md. RAW_ENABLE is set in rules.mk.
+#ifdef RAW_ENABLE
+#    include "raw_hid.h"
+
+#    define KEYTRAY_MAGIC 0x4B
+#    define KEYTRAY_VERSION 0x01
+#    define KEYTRAY_MSG_STATE 0x01
+#    define KEYTRAY_MSG_GET_STATE 0x02
+#    define KEYTRAY_REPORT_LEN 32 // RAW_EPSIZE
+
+static void keytray_send_state(layer_state_t state) {
+    uint8_t  report[KEYTRAY_REPORT_LEN] = {0};
+    uint32_t mask               = (uint32_t)state;
+    report[0]                   = KEYTRAY_MAGIC;
+    report[1]                   = KEYTRAY_VERSION;
+    report[2]                   = KEYTRAY_MSG_STATE;
+    report[3]                   = get_highest_layer(state);
+    report[4]                   = mask & 0xFF;
+    report[5]                   = (mask >> 8) & 0xFF;
+    report[6]                   = (mask >> 16) & 0xFF;
+    report[7]                   = (mask >> 24) & 0xFF;
+    report[8]                   = 0; // no batteries on a wired keyboard
+    raw_hid_send(report, sizeof(report));
+}
+
+// The app asks for the state when it connects.
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    if (length >= 3 && data[0] == KEYTRAY_MAGIC && data[2] == KEYTRAY_MSG_GET_STATE) {
+        keytray_send_state(layer_state | default_layer_state);
+    }
+}
+
+// Sends the state whenever it changes, after tri-layer and every other update settled.
+void housekeeping_task_user(void) {
+    static layer_state_t last_state = 0;
+    static bool          sent       = false;
+    if (!is_keyboard_master()) {
+        return;
+    }
+    layer_state_t state = layer_state | default_layer_state;
+    if (!sent || state != last_state) {
+        last_state = state;
+        sent       = true;
+        keytray_send_state(state);
+    }
+}
+#endif
